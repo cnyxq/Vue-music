@@ -2,8 +2,8 @@
 import {commonParams} from 'api/config'
 import axios from 'axios'
 
-export function getFocusList () {
-  const url = '/api/getFocusList'
+export function getRecommend () {
+  const url = '/api/getRecommend'
   const data = Object.assign({}, commonParams, {
     '-': 'recom044608360353141974',
     loginUin: 0,

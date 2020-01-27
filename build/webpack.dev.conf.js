@@ -30,7 +30,8 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   devServer: {
     // 后端代理接口
     before(app) {
-      app.get('/api/getFocusList', (req, res) => {
+      // 推荐页数据
+      app.get('/api/getRecommend', (req, res) => {
         const url = 'https://u.y.qq.com/cgi-bin/musicu.fcg'
         axios.get(url, {
           headers: {
@@ -38,6 +39,40 @@ const devWebpackConfig = merge(baseWebpackConfig, {
             host: 'u.y.qq.com'
           },
           params: req.query
+        }).then(response => {
+          res.json(response.data)
+        }).catch(err => {
+          res.status(404).json(err)
+        })
+      }),
+      // 歌手排行页数据
+      app.get('/api/getSingerList', (req, res) => {
+        const url = 'https://u.y.qq.com/cgi-bin/musicu.fcg'
+        axios.get(url, {
+          headers: {
+            referer: 'https://y.qq.com/portal/singer_list.html',
+            host: 'u.y.qq.com'
+          },
+          params: req.query
+        }).then(response => {
+          res.json(response.data)
+        }).catch(err => {
+          res.status(404).json(err)
+        })
+      })
+      // 歌手详情歌单数据
+      app.get('/api/getSingerDetail', (req, res) => {
+        const url = 'https://u.y.qq.com/cgi-bin/musicu.fcg'
+        function del () {
+          delete req.query.singerId
+          return req.query
+        }
+        axios.get(url, {
+          headers: {
+            referer: `https://y.qq.com/n/yqq/singer/${req.query.singerId}.html`,
+            host: 'u.y.qq.com'
+          },
+          params: del()
         }).then(response => {
           res.json(response.data)
         }).catch(err => {
