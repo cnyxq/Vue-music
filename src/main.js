@@ -6,6 +6,8 @@ import 'common/stylus/reset.styl'
 import VueLazyLoad from 'vue-lazyload'
 import store from './store/index'
 
+import 'common/stylus/icon.styl'
+
 // 图片懒加载
 Vue.use(VueLazyLoad, {
   loading: require('common/image/default.png')
