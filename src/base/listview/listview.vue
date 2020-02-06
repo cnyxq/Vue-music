@@ -60,8 +60,10 @@ export default {
     }
   },
   methods: {
+    refresh () {
+      this.$refs.listview.refresh()
+    },
     selectItem (item) {
-      console.log(item)
       this.$emit('select', item)
     },
     onShortCutTouchStart (el) { // 点击监听

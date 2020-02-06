@@ -79,6 +79,66 @@ const devWebpackConfig = merge(baseWebpackConfig, {
           res.status(404).json(err)
         })
       })
+      // 歌词
+      app.get('/api/getSongLyric', (req, res) => {
+        const url = 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg'
+        axios.get(url, {
+          headers: {
+            referer: 'https://y.qq.com/portal/player.html',
+            host: 'c.y.qq.com'
+          },
+          params: req.query
+        }).then(response => {
+          res.json(response.data)
+        }).catch(err => {
+          res.status(404).json(err)
+        })
+      })
+      // 歌单
+      app.get('/api/getSongSheet', (req, res) => {
+        const url = 'https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg'
+        axios.get(url, {
+          headers: {
+            referer: `https://y.qq.com/n/yqq/playlist/${req.query.disstid}.html`,
+            host: 'c.y.qq.com'
+          },
+          params: req.query
+        }).then(response => {
+          res.json(response.data)
+        }).catch(err => {
+          res,status(404).json(err)
+        })
+      })
+      // 排行榜
+      app.get('/api/getTopList', (req, res) => {
+        const url = 'https://u.y.qq.com/cgi-bin/musicu.fcg'
+        axios.get(url, {
+          headers: {
+            referer: `https://y.qq.com/n/yqq/toplist/${req.query.topId}.html`,
+            host: 'u.y.qq.com'
+          },
+          params: req.query
+        }).then(response => {
+          res.json(response.data)
+        }).catch(err => {
+          res,status(404).json(err)
+        })
+      })
+      // 热词
+      app.get('/api/getHotKey', (req, res) => {
+        const url = 'https://u.y.qq.com/cgi-bin/musicu.fcg'
+        axios.get(url, {
+          headers: {
+            referer: 'https://y.qq.com/m/index.html',
+            host: 'u.y.qq.com'
+          },
+          params: req.query
+        }).then(response => {
+          res.json(response.data)
+        }).catch(err => {
+          res,status(404).json(err)
+        })
+      })
     },
     clientLogLevel: 'warning',
     historyApiFallback: {

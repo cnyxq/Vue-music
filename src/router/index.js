@@ -5,8 +5,15 @@ import Singer from 'components/singer/singer'
 import Rank from 'components/rank/rank'
 import Search from 'components/search/search'
 import SingerDetail from 'components/singer-detail/singer-detail'
+import SongSheet from 'components/song-sheet/song-sheet'
+import TopList from 'components/top-list/top-list'
 
 Vue.use(Router)
+
+// const routerPush = Router.prototype.push
+// Router.prototype.push = function push (location) {
+//   return routerPush.call(this, location).catch(error => error)
+// }
 
 export default new Router({
   mode: 'history',
@@ -17,7 +24,13 @@ export default new Router({
     },
     {
       path: '/recommend',
-      component: Recommend
+      component: Recommend,
+      children: [
+        {
+          path: ':id',
+          component: SongSheet
+        }
+      ]
     },
     {
       path: '/singer',
@@ -31,7 +44,13 @@ export default new Router({
     },
     {
       path: '/rank',
-      component: Rank
+      component: Rank,
+      children: [
+        {
+          path: ':id',
+          component: TopList
+        }
+      ]
     },
     {
       path: '/search',
