@@ -10,3 +10,6 @@ export const currentSong = (state) => {
 }
 export const songSheet = (state) => state.songSheet
 export const topList = state => state.topList
+export const searchHistory = state => state.searchHistory
+export const playHistory = state => state.playHistory
+export const favorite = state => state.favorite

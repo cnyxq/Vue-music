@@ -64,6 +64,7 @@ export default {
       this.$refs.listview.refresh()
     },
     selectItem (item) {
+      console.log(item)
       this.$emit('select', item)
     },
     onShortCutTouchStart (el) { // 点击监听

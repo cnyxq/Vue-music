@@ -57,7 +57,7 @@
               <i class="icon-next"></i>
             </div>
             <div class="icon i-right">
-              <i class="icon icon-not-favorite"></i>
+              <i class="icon" @click="toggleFavorite(currentSong)" :class="getFavoriteIcon(currentSong)"></i>
             </div>
           </div>
         </div>
@@ -75,17 +75,18 @@
         <div class="control" @click.stop.prevent="togglePlaying">
           <i :class="miniPlayIcon"></i>
         </div>
-        <div class="control">
+        <div class="control" @click.stop.prevent="showPlayList">
           <i class="icon-playlist"></i>
         </div>
       </div>
     </transition>
+    <play-list ref="playList"></play-list>
     <audio ref="audio" :src="currentSong.url" @canplay="ready" @error="error" @timeupdate="updateTime" @ended="end"></audio>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 import ProgressBar from 'base/progress-bar/progress-bar'
 import { playMode } from 'common/js/config'
 import { shuffle } from 'common/js/util'
@@ -94,6 +95,7 @@ import { ERR_OK } from 'api/config'
 import { Base64 } from 'js-base64'
 import { parserLyric } from 'common/js/parserLyric'
 import Scroll from 'base/scroll/scroll'
+import PlayList from 'components/playlist/playlist'
 export default {
   name: 'player',
   data () {
@@ -132,7 +134,7 @@ export default {
           return 'icon-random'
       }
     },
-    ...mapGetters(['fullScreen', 'playList', 'currentSong', 'playing', 'currentIndex', 'mode', 'sequenceList'])
+    ...mapGetters(['fullScreen', 'playList', 'currentSong', 'playing', 'currentIndex', 'mode', 'sequenceList', 'favorite'])
   },
   methods: {
     getData () {
@@ -204,6 +206,8 @@ export default {
     },
     ready () { // 避免快速点击
       this.songReady = true
+      // 保存播放历史
+      this.savePlayHistory(this.currentSong)
     },
     error () { // 避免url失效导致无法下一首或上一首
       this.songReady = true
@@ -306,6 +310,30 @@ export default {
       this.$refs.middle.style['transitionDuration'] = '500ms'
       this.touch.initiated = false
     },
+    showPlayList () {
+      this.$refs.playList.show()
+    },
+    getFavoriteIcon (song) {
+      if (this.isFavorite(song)) {
+        return 'icon-favorite'
+      }
+      return 'icon-not-favorite'
+    },
+    toggleFavorite (song) {
+      if (this.isFavorite(song)) {
+        console.log('有, 现在删除')
+        this.delOneFavorite(song)
+      } else {
+        console.log('没有,现在添加')
+        this.saveOneFavorite(song)
+      }
+    },
+    isFavorite (song) {
+      let index = this.favorite.findIndex((item) => {
+        return item.id === song.id
+      })
+      return index > -1
+    },
     ...mapMutations({
       setFullScreen: 'SET_FULL_SCREEN',
       setPlaying: 'SET_PLAYING',
@@ -313,10 +341,18 @@ export default {
       setMode: 'SET_MODE',
       setSequenceList: 'SET_SEQUENCE_LIST',
       setPlayList: 'SET_PLAY_LIST'
-    })
+    }),
+    ...mapActions([
+      'savePlayHistory',
+      'saveOneFavorite',
+      'delOneFavorite'
+    ])
   },
   watch: {
     currentSong (newSong, oldSong) {
+      if (!newSong) {
+        return
+      }
       if (newSong && oldSong && newSong.id === oldSong.id) {
         return
       }
@@ -350,7 +386,8 @@ export default {
   },
   components: {
     ProgressBar,
-    Scroll
+    Scroll,
+    PlayList
   }
 }
 </script>

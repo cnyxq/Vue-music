@@ -20,11 +20,11 @@ export function createSong (songInfo) {
     album: songInfo.album.name, // 专辑
     duration: songInfo.interval, // 歌曲时常单位秒
     image: `https://y.gtimg.cn/music/photo_new/T002R300x300M000${songInfo.album.mid}.jpg?max_age=2592000`,
-    url: `http://ws.stream.qqmusic.qq.com/C400${songInfo.file.media_mid}.m4a?guid=2023010286&vkey=C753E93770F92A6A760173D3B56ADD6DEFB2274B9300579A5CF26D6A94B13A3A5BD8C1B4A61B2056CDBF91434DF636E7FB0AA6F827D5454A&uin=0&fromtag=66` // 播放源
+    url: `http://isure.stream.qqmusic.qq.com/C400${songInfo.file.media_mid}.m4a?guid=2023010286&vkey=FDFE2387A101FCD41CE2DD64BD1E03A69C50BA43FD7412D2E8AE3E630B862C7FD3073FFDE2F2A5987994CDA56ACF1EF145A14685A9587A08&uin=0&fromtag=66` // 播放源
   })
 }
 
-function filterSinger (singer) {
+export function filterSinger (singer) {
   let ret = []
   if (!singer) {
     return ''

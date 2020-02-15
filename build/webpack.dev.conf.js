@@ -139,6 +139,22 @@ const devWebpackConfig = merge(baseWebpackConfig, {
           res,status(404).json(err)
         })
       })
+      // 搜索返回值
+      app.get('/api/getSearchVal', (req, res) => {
+        const url = 'https://c.y.qq.com/soso/fcgi-bin/search_for_qq_cp'
+        axios.get(url, {
+          headers: {
+            referer: 'https://y.qq.com/m/index.html',
+            host: 'c.y.qq.com',
+            origin: 'https://y.qq.com'
+          },
+          params: req.query
+        }).then(response => {
+          res.json(response.data)
+        }).catch(err => {
+          res,status(404).json(err)
+        })
+      })
     },
     clientLogLevel: 'warning',
     historyApiFallback: {
